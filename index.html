@@ -4,253 +4,878 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة الطلبات الملغاة - CRISPY CHICKEN LU HGG[</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* إعدادات عامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #333;
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* الهيدر */
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* أقسام الصفحة */
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* النماذج */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            direction: rtl;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        /* الأزرار */
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* لوحات التحكم */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .dashboard-card h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        /* الجداول */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        th {
+            background: #ff6b35;
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* الفلاتر */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        /* الحالات */
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* الإشعارات */
+        .notifications {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: #2ecc71;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* التقارير */
+        .report-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .report-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .report-card h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .report-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .report-stat {
+            text-align: center;
+        }
+
+        .report-stat .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .report-stat .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* الاستجابة للجوال */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- شعار المطعم -->
-        <header class="custom-header">
-            <div class="logo-container">
-                <img src="https://z-cdn-media.chatglm.cn/files/cd48ed1a-e80f-49cd-8a93-65adfdabf509_og-crispy-chicken-1200x630.png" alt="CRISPY CHICKEN LU HGG[" class="logo">
-                <div class="restaurant-info">
-                    <h1>CRISPY CHICKEN LU HGG[</h1>
-                    <p>نظام إدارة الطلبات الملغاة</p>
-                </div>
+        <!-- الهيدر -->
+        <header class="header">
+            <div>
+                <h1>نظام إدارة الطلبات الملغاة - CRISPY CHICKEN LU HGG[</h1>
             </div>
             <div class="header-stats">
-                <div class="header-stat">
-                    <i class="fas fa-calendar-day"></i>
-                    <span id="current-date"></span>
+                <div class="stat-card">
+                    <span>إجمالي الطلبات</span>
+                    <strong id="totalOrders">0</strong>
                 </div>
-                <div class="header-stat">
-                    <i class="fas fa-clock"></i>
-                    <span id="current-time"></span>
+                <div class="stat-card">
+                    <span>الطلبات الملغاة</span>
+                    <strong id="cancelledOrders">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>الطلبات المكتملة</span>
+                    <strong id="deliveredOrders">0</strong>
                 </div>
             </div>
         </header>
 
-        <!-- قسم إضافة الطلب -->
-        <section class="input-section">
+        <!-- إضافة طلب جديد -->
+        <section class="section">
             <div class="section-header">
                 <h2><i class="fas fa-plus-circle"></i> إضافة طلب جديد</h2>
-                <p>ادخل بيانات الطلب الملغاء هنا</p>
             </div>
-            <form id="order-form">
+            <form id="orderForm">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="order-id">
-                            <i class="fas fa-hashtag"></i> رقم الطلب
-                        </label>
-                        <input type="text" id="order-id" required placeholder="مثال: #12345">
+                        <label for="brand">الماركة</label>
+                        <input type="text" id="brand" required>
                     </div>
                     <div class="form-group">
-                        <label for="customer-name">
-                            <i class="fas fa-user"></i> اسم العميل
-                        </label>
-                        <input type="text" id="customer-name" required placeholder="مثال: أحمد محمد">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="restaurant">
-                            <i class="fas fa-store"></i> اسم المطعم
-                        </label>
-                        <input type="text" id="restaurant" required value="CRISPY CHICKEN LU HGG[" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="platform">
-                            <i class="fas fa-globe"></i> المنصة
-                        </label>
-                        <select id="platform" required>
-                            <option value="">اختر المنصة</option>
-                            <option value="UberEats">UberEats</option>
+                        <label for="channel">القناة</label>
+                        <select id="channel" required>
+                            <option value="">اختر القناة</option>
+                            <option value="Careem">Careem</option>
+                            <option value="Zomato">Zomato</option>
                             <option value="Talabat">Talabat</option>
-                            <option value="Elmenus">Elmenus</option>
-                            <option value="شيفز">شيفز</option>
-                            <option value="تم إزالته">تم إزالته</option>
+                            <option value="UberEats">UberEats</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">الفرع</label>
+                        <input type="text" id="branch" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="amount">
-                            <i class="fas fa-money-bill-wave"></i> المبلغ (درهم)
-                        </label>
-                        <input type="number" id="amount" step="0.01" required placeholder="مثال: 45.50">
-                    </div>
-                    <div class="form-group">
-                        <label for="reason">
-                            <i class="fas fa-exclamation-triangle"></i> سبب الإلغاء
-                        </label>
-                        <select id="reason" required>
-                            <option value="">اختر السبب</option>
-                            <option value="العميل غير متوفر">العميل غير متوفر</option>
-                            <option value="خطأ في العنوان">خطأ في العنوان</option>
-                            <option value="الطلب تم إلغاؤه تلقائيًا">الطلب تم إلغاؤه تلقائيًا</option>
-                            <option value="غير متوفر في المخزون">غير متوفر في المخزون</option>
-                            <option value="أسباب أخرى">أسباب أخرى</option>
+                        <label for="status">الحالة</label>
+                        <select id="status" required>
+                            <option value="">اختر الحالة</option>
+                            <option value="cancelled">ملغى</option>
+                            <option value="delivered">مُسَلَّم</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="price">السعر (درهم)</label>
+                        <input type="number" id="price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCount">عدد الطلبات</label>
+                        <input type="number" id="orderCount" min="1" required>
+                    </div>
                 </div>
-                <button type="submit" class="btn-primary">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus"></i> إضافة الطلب
                 </button>
             </form>
         </section>
 
-        <!-- قسم التقرير -->
-        <section class="report-section">
+        <!-- لوحات التحكم -->
+        <section class="section">
             <div class="section-header">
-                <h2><i class="fas fa-chart-bar"></i> تقرير اليوم</h2>
-                <p>عرض جميع الطلبات الملغاء وإحصائياتها</p>
+                <h2><i class="fas fa-chart-bar"></i> لوحات التحكم</h2>
             </div>
-            
-            <!-- بطاقات الإحصائيات -->
-            <div class="stats-cards">
-                <div class="stat-card primary">
-                    <div class="stat-icon">
-                        <i class="fas fa-times-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span>إجمالي الطلبات الملغاء</span>
-                        <strong id="total-orders">0</strong>
-                    </div>
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <h3>إجمالي الخسائر</h3>
+                    <div class="value" id="totalLoss">0.00 درهم</div>
                 </div>
-                <div class="stat-card success">
-                    <div class="stat-icon">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span>إجمالي المبلغ (درهم)</span>
-                        <strong id="total-amount">0.00</strong>
-                    </div>
+                <div class="dashboard-card">
+                    <h3>نسبة الإلغاء</h3>
+                    <div class="value" id="cancellationRate">0%</div>
                 </div>
-                <div class="stat-card warning">
-                    <div class="stat-icon">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span>إجمالي المطاعم المتأثرة</span>
-                        <strong id="total-restaurants">0</strong>
-                    </div>
+                <div class="dashboard-card">
+                    <h3>إجمالي الإيرادات</h3>
+                    <div class="value" id="totalRevenue">0.00 درهم</div>
                 </div>
-                <div class="stat-card info">
-                    <div class="stat-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <span>الطلبات المكتملة</span>
-                        <strong id="completed-orders">0</strong>
-                    </div>
+                <div class="dashboard-card">
+                    <h3>أكثر قناة إلغاءً</h3>
+                    <div class="value" id="topCancellationChannel">-</div>
                 </div>
             </div>
+        </section>
 
-            <!-- أزرار تصفية التصدير -->
-            <div class="action-buttons">
-                <div class="filter-section">
-                    <input type="date" id="filter-date" class="date-input">
-                    <button id="apply-filter" class="btn-secondary">
-                        <i class="fas fa-filter"></i> تصفية
+        <!-- الفلاتر والبحث -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-filter"></i> الفلاتر والبحث</h2>
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filterChannel">فلترة حسب القناة</label>
+                    <select id="filterChannel" onchange="renderTable()">
+                        <option value="">الكل</option>
+                        <option value="Careem">Careem</option>
+                        <option value="Zomato">Zomato</option>
+                        <option value="Talabat">Talabat</option>
+                        <option value="UberEats">UberEats</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterBranch">فلترة حسب الفرع</label>
+                    <input type="text" id="filterBranch" onkeyup="renderTable()" placeholder="ابحث بالفرع...">
+                </div>
+                <div class="filter-group">
+                    <label for="filterStatus">فلترة حسب الحالة</label>
+                    <select id="filterStatus" onchange="renderTable()">
+                        <option value="">الكل</option>
+                        <option value="cancelled">ملغى</option>
+                        <option value="delivered">مُسَلَّم</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- جدول الطلبات -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-table"></i> جدول الطلبات</h2>
+                <div>
+                    <button class="btn btn-secondary" onclick="exportToCSV()">
+                        <i class="fas fa-file-csv"></i> تصدير CSV
                     </button>
-                    <button id="clear-filter" class="btn-secondary">
-                        <i class="fas fa-times"></i> إزالة التصفية
+                    <button class="btn btn-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.print()">
+                        <i class="fas fa-print"></i> طباعة
                     </button>
                 </div>
-                <button id="export-csv" class="btn-success">
-                    <i class="fas fa-file-csv"></i> تصدير CSV
-                </button>
             </div>
-
-            <!-- جدول الطلبات -->
             <div class="table-container">
-                <table class="orders-table">
+                <table id="ordersTable">
                     <thead>
                         <tr>
-                            <th>رقم الطلب</th>
-                            <th>العميل</th>
-                            <th>المطعم</th>
-                            <th>المنصة</th>
-                            <th>المبلغ</th>
-                            <th>السبب</th>
+                            <th>الماركة</th>
+                            <th>القناة</th>
+                            <th>الفرع</th>
                             <th>الحالة</th>
+                            <th>السعر</th>
+                            <th>عدد الطلبات</th>
+                            <th>المجموع</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
-                    <tbody id="orders-tbody">
-                        <!-- سيتم ملء البيانات هنا ديناميًا -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- قسم إرسال الإشعارات -->
-        <section class="whatsapp-section">
+        <!-- التقارير -->
+        <section class="report-section">
             <div class="section-header">
-                <h2><i class="fab fa-whatsapp"></i> إرسال إشعارات للمطاعم</h2>
-                <p>أرسل إشعارات واتساب للمطاعم حول الطلبات الملغاء</p>
+                <h2><i class="fas fa-chart-line"></i> التقارير</h2>
+                <div>
+                    <button class="btn btn-success" onclick="sendReport('email')">
+                        <i class="fas fa-envelope"></i> إرسال عبر الإيميل
+                    </button>
+                    <button class="btn btn-success" onclick="sendReport('whatsapp')">
+                        <i class="fab fa-whatsapp"></i> إرسال عبر واتساب
+                    </button>
+                </div>
             </div>
-            <div class="whatsapp-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="whatsapp-restaurant">
-                            <i class="fas fa-store"></i> اختر المطعم
-                        </label>
-                        <select id="whatsapp-restaurant">
-                            <option value="">اختر المطعم</option>
-                            <!-- سيتم ملء الخيارات ديناميكيًا -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="whatsapp-number">
-                            <i class="fas fa-phone"></i> رقم واتساب المطعم
-                        </label>
-                        <input type="tel" id="whatsapp-number" placeholder="مثال: +971501234567">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="whatsapp-message">
-                        <i class="fas fa-comment"></i> رسالة الإشعار
-                    </label>
-                    <textarea id="whatsapp-message" rows="4" placeholder="اكتب رسالة الإشعار هنا..."></textarea>
-                </div>
-                <button id="send-whatsapp" class="btn-success">
-                    <i class="fab fa-whatsapp"></i> إرسال الإشعار
-                </button>
+            <div id="reportsContainer">
+                <!-- سيتم ملء التقارير هنا ديناميكيًا -->
             </div>
         </section>
     </div>
 
-    <!-- نافذة منبثقة للرد على الإشعار -->
-    <div id="response-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="modal-header">
-                <h3><i class="fas fa-reply"></i> رد المطعم</h3>
-                <p>اختر سبب الرد</p>
-            </div>
-            <div class="form-group">
-                <label for="response-reason">سبب الرد</label>
-                <select id="response-reason">
-                    <option value="تم التسليم">تم التسليم للسائق</option>
-                    <option value="لم يتم التسليم">لم يتم تنفيذ الطلب</option>
-                    <option value="معلومات غير صحيحة">معلومات غير صحيحة</option>
-                    <option value="طلب إعادة">طلب إعادة الطلب</option>
-                </select>
-            </div>
-            <button id="submit-response" class="btn-primary">
-                <i class="fas fa-paper-plane"></i> إرسال الرد
-            </button>
-        </div>
-    </div>
+    <!-- الإشعارات -->
+    <div class="notifications" id="notifications"></div>
 
-    <!-- شاشة تحميل -->
-    <div id="loading" class="loading">
-        <div class="spinner"></div>
-        <p>جاري تحميل البيانات...</p>
-    </div>
+    <!-- مكتبة PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // إدارة البيانات
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
-    <script src="script.js"></script>
+        // إضافة طلب جديد
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const brand = document.getElementById('brand').value.trim();
+            const channel = document.getElementById('channel').value;
+            const branch = document.getElementById('branch').value.trim();
+            const status = document.getElementById('status').value;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const orderCount = parseInt(document.getElementById('orderCount').value) || 0;
+            
+            if (!brand || !channel || !branch || !status || price <= 0 || orderCount <= 0) {
+                showNotification('يرجى ملء جميع الحقول بشكل صحيح!', 'error');
+                return;
+            }
+            
+            const order = {
+                id: Date.now(),
+                brand,
+                channel,
+                branch,
+                status,
+                price,
+                orderCount,
+                total: price * orderCount,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // إعادة تعيين النموذج
+            this.reset();
+            
+            // تحديث العرض
+            renderTable();
+            updateDashboard();
+            generateReports();
+            
+            showNotification('تمت إضافة الطلب بنجاح!');
+        });
+
+        // عرض الجدول
+        function renderTable() {
+            const tbody = document.querySelector('#ordersTable tbody');
+            tbody.innerHTML = '';
+            
+            const filterChannel = document.getElementById('filterChannel').value;
+            const filterBranch = document.getElementById('filterBranch').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+            
+            const filteredOrders = orders.filter(order => {
+                const matchChannel = !filterChannel || order.channel === filterChannel;
+                const matchBranch = !filterBranch || order.branch.toLowerCase().includes(filterBranch);
+                const matchStatus = !filterStatus || order.status === filterStatus;
+                
+                return matchChannel && matchBranch && matchStatus;
+            });
+            
+            filteredOrders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${order.brand}</td>
+                    <td>${order.channel}</td>
+                    <td>${order.branch}</td>
+                    <td>
+                        <span class="status ${order.status}">
+                            ${order.status === 'cancelled' ? 'ملغى' : 'مُسَلَّم'}
+                        </span>
+                    </td>
+                    <td>${order.price.toFixed(2)} درهم</td>
+                    <td>${order.orderCount}</td>
+                    <td>${order.total.toFixed(2)} درهم</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // تحديث لوحة التحكم
+        function updateDashboard() {
+            const totalOrders = orders.length;
+            const cancelledOrders = orders.filter(o => o.status === 'cancelled').length;
+            const deliveredOrders = orders.filter(o => o.status === 'delivered').length;
+            const totalLoss = orders.filter(o => o.status === 'cancelled')
+                .reduce((sum, o) => sum + o.total, 0);
+            const totalRevenue = orders.filter(o => o.status === 'delivered')
+                .reduce((sum, o) => sum + o.total, 0);
+            const cancellationRate = totalOrders > 0 ? 
+                ((cancelledOrders / totalOrders) * 100).toFixed(1) : 0;
+            
+            // إيجاد أكثر قناة إلغاءً
+            const channelCounts = {};
+            orders.filter(o => o.status === 'cancelled').forEach(o => {
+                channelCounts[o.channel] = (channelCounts[o.channel] || 0) + 1;
+            });
+            const topChannel = Object.keys(channelCounts).reduce((a, b) => 
+                channelCounts[a] > channelCounts[b] ? a : b, '-');
+            
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('cancelledOrders').textContent = cancelledOrders;
+            document.getElementById('deliveredOrders').textContent = deliveredOrders;
+            document.getElementById('totalLoss').textContent = totalLoss.toFixed(2) + ' درهم';
+            document.getElementById('cancellationRate').textContent = cancellationRate + '%';
+            document.getElementById('totalRevenue').textContent = totalRevenue.toFixed(2) + ' درهم';
+            document.getElementById('topCancellationChannel').textContent = topChannel;
+        }
+
+        // إنشاء التقارير
+        function generateReports() {
+            const reportsContainer = document.getElementById('reportsContainer');
+            
+            // تقرير إجمالي
+            const totalReport = generateTotalReport();
+            
+            // تقرير حسب القناة
+            const channelReport = generateChannelReport();
+            
+            // تقرير حسب الفرع
+            const branchReport = generateBranchReport();
+            
+            reportsContainer.innerHTML = `
+                <div class="report-card">
+                    <h3>تقرير إجمالي</h3>
+                    ${totalReport}
+                </div>
+                <div class="report-card">
+                    <h3>تقرير حسب القناة</h3>
+                    ${channelReport}
+                </div>
+                <div class="report-card">
+                    <h3>تقرير حسب الفرع</h3>
+                    ${branchReport}
+                </div>
+            `;
+        }
+
+        // إنشاء تقرير إجمالي
+        function generateTotalReport() {
+            const totalOrders = orders.length;
+            const cancelledOrders = orders.filter(o => o.status === 'cancelled').length;
+            const deliveredOrders = orders.filter(o => o.status === 'delivered').length;
+            const totalLoss = orders.filter(o => o.status === 'cancelled')
+                .reduce((sum, o) => sum + o.total, 0);
+            const totalRevenue = orders.filter(o => o.status === 'delivered')
+                .reduce((sum, o) => sum + o.total, 0);
+            
+            return `
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="value">${totalOrders}</div>
+                        <div class="label">إجمالي الطلبات</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value">${cancelledOrders}</div>
+                        <div class="label">الطلبات الملغاة</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value">${deliveredOrders}</div>
+                        <div class="label">الطلبات المُسَلَّمة</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value">${totalLoss.toFixed(2)} درهم</div>
+                        <div class="label">إجمالي الخسائر</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="value">${totalRevenue.toFixed(2)} درهم</div>
+                        <div class="label">إجمالي الإيرادات</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // إنشاء تقرير حسب القناة
+        function generateChannelReport() {
+            const channels = ['Careem', 'Zomato', 'Talabat', 'UberEats'];
+            let reportHtml = '<div class="report-stats">';
+            
+            channels.forEach(channel => {
+                const channelOrders = orders.filter(o => o.channel === channel);
+                const channelCancelled = channelOrders.filter(o => o.status === 'cancelled').length;
+                const channelDelivered = channelOrders.filter(o => o.status === 'delivered').length;
+                const channelLoss = channelOrders.filter(o => o.status === 'cancelled')
+                    .reduce((sum, o) => sum + o.total, 0);
+                const channelRevenue = channelOrders.filter(o => o.status === 'delivered')
+                    .reduce((sum, o) => sum + o.total, 0);
+                
+                reportHtml += `
+                    <div class="report-stat">
+                        <div class="value">${channel}</div>
+                        <div class="label">${channelCancelled} ملغى / ${channelDelivered} مُسَلَّم</div>
+                        <div class="label">${channelLoss.toFixed(2)} درهم خسارة</div>
+                        <div class="label">${channelRevenue.toFixed(2)} درهم إيراد</div>
+                    </div>
+                `;
+            });
+            
+            reportHtml += '</div>';
+            return reportHtml;
+        }
+
+        // إنشاء تقرير حسب الفرع
+        function generateBranchReport() {
+            const branches = [...new Set(orders.map(o => o.branch))];
+            let reportHtml = '<div class="report-stats">';
+            
+            branches.forEach(branch => {
+                const branchOrders = orders.filter(o => o.branch === branch);
+                const branchCancelled = branchOrders.filter(o => o.status === 'cancelled').length;
+                const branchDelivered = branchOrders.filter(o => o.status === 'delivered').length;
+                const branchLoss = branchOrders.filter(o => o.status === 'cancelled')
+                    .reduce((sum, o) => sum + o.total, 0);
+                const branchRevenue = branchOrders.filter(o => o.status === 'delivered')
+                    .reduce((sum, o) => sum + o.total, 0);
+                
+                reportHtml += `
+                    <div class="report-stat">
+                        <div class="value">${branch}</div>
+                        <div class="label">${branchCancelled} ملغى / ${branchDelivered} مُسَلَّم</div>
+                        <div class="label">${branchLoss.toFixed(2)} درهم خسارة</div>
+                        <div class="label">${branchRevenue.toFixed(2)} درهم إيراد</div>
+                    </div>
+                `;
+            });
+            
+            reportHtml += '</div>';
+            return reportHtml;
+        }
+
+        // حذف طلب
+        function deleteOrder(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                orders = orders.filter(o => o.id !== id);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                renderTable();
+                updateDashboard();
+                generateReports();
+                showNotification('تم حذف الطلب بنجاح!');
+            }
+        }
+
+        // تصدير CSV
+        function exportToCSV() {
+            let csv = "الماركة,القناة,الفرع,الحالة,السعر,عدد الطلبات,المجموع,التاريخ\n";
+            
+            orders.forEach(order => {
+                csv += `${order.brand},${order.channel},${order.branch},${order.status === 'cancelled' ? 'ملغى' : 'مُسَلَّم'},${order.price},${order.orderCount},${order.total},${order.date}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `orders_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('تم تصدير الملف بنجاح!');
+        }
+
+        // تصدير PDF
+        function exportToPDF() {
+            const element = document.querySelector('.container');
+            const opt = {
+                margin: 10,
+                filename: `orders_report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+            
+            showNotification('تم تصدير التقرير بنجاح!');
+        }
+
+        // إرسال التقرير
+        function sendReport(method) {
+            const reportData = {
+                total: generateTotalReport(),
+                channels: generateChannelReport(),
+                branches: generateBranchReport()
+            };
+            
+            if (method === 'email') {
+                // في التطبيق الحقيقي، سيتم إرسال الإيميل عبر API
+                showNotification('سيتم إرسال التقرير عبر الإيميل قريباً!');
+            } else if (method === 'whatsapp') {
+                // في التطبيق الحقيقي، سيتم إرسال الرسالة عبر API
+                showNotification('سيتم إرسال التقرير عبر واتساب قريباً!');
+            }
+        }
+
+        // عرض الإشعارات
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.getElementById('notifications').appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+            updateDashboard();
+            generateReports();
+        });
+    </script>
 </body>
 </html>
