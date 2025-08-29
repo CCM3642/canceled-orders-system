@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الطلبات الملغاة - CRISPY CHICKEN LU HGG[</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- شعار المطعم -->
+        <header class="custom-header">
+            <div class="logo-container">
+                <img src="https://z-cdn-media.chatglm.cn/files/cd48ed1a-e80f-49cd-8a93-65adfdabf509_og-crispy-chicken-1200x630.png" alt="CRISPY CHICKEN LU HGG[" class="logo">
+                <div class="restaurant-info">
+                    <h1>CRISPY CHICKEN LU HGG[</h1>
+                    <p>نظام إدارة الطلبات الملغاة</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <i class="fas fa-calendar-day"></i>
+                    <span id="current-date"></span>
+                </div>
+                <div class="header-stat">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- قسم إضافة الطلب -->
+        <section class="input-section">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> إضافة طلب جديد</h2>
+                <p>ادخل بيانات الطلب الملغاء هنا</p>
+            </div>
+            <form id="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="order-id">
+                            <i class="fas fa-hashtag"></i> رقم الطلب
+                        </label>
+                        <input type="text" id="order-id" required placeholder="مثال: #12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-name">
+                            <i class="fas fa-user"></i> اسم العميل
+                        </label>
+                        <input type="text" id="customer-name" required placeholder="مثال: أحمد محمد">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="restaurant">
+                            <i class="fas fa-store"></i> اسم المطعم
+                        </label>
+                        <input type="text" id="restaurant" required value="CRISPY CHICKEN LU HGG[" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="platform">
+                            <i class="fas fa-globe"></i> المنصة
+                        </label>
+                        <select id="platform" required>
+                            <option value="">اختر المنصة</option>
+                            <option value="UberEats">UberEats</option>
+                            <option value="Talabat">Talabat</option>
+                            <option value="Elmenus">Elmenus</option>
+                            <option value="شيفز">شيفز</option>
+                            <option value="تم إزالته">تم إزالته</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">
+                            <i class="fas fa-money-bill-wave"></i> المبلغ (درهم)
+                        </label>
+                        <input type="number" id="amount" step="0.01" required placeholder="مثال: 45.50">
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">
+                            <i class="fas fa-exclamation-triangle"></i> سبب الإلغاء
+                        </label>
+                        <select id="reason" required>
+                            <option value="">اختر السبب</option>
+                            <option value="العميل غير متوفر">العميل غير متوفر</option>
+                            <option value="خطأ في العنوان">خطأ في العنوان</option>
+                            <option value="الطلب تم إلغاؤه تلقائيًا">الطلب تم إلغاؤه تلقائيًا</option>
+                            <option value="غير متوفر في المخزون">غير متوفر في المخزون</option>
+                            <option value="أسباب أخرى">أسباب أخرى</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-plus"></i> إضافة الطلب
+                </button>
+            </form>
+        </section>
+
+        <!-- قسم التقرير -->
+        <section class="report-section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> تقرير اليوم</h2>
+                <p>عرض جميع الطلبات الملغاء وإحصائياتها</p>
+            </div>
+            
+            <!-- بطاقات الإحصائيات -->
+            <div class="stats-cards">
+                <div class="stat-card primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span>إجمالي الطلبات الملغاء</span>
+                        <strong id="total-orders">0</strong>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span>إجمالي المبلغ (درهم)</span>
+                        <strong id="total-amount">0.00</strong>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span>إجمالي المطاعم المتأثرة</span>
+                        <strong id="total-restaurants">0</strong>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span>الطلبات المكتملة</span>
+                        <strong id="completed-orders">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار تصفية التصدير -->
+            <div class="action-buttons">
+                <div class="filter-section">
+                    <input type="date" id="filter-date" class="date-input">
+                    <button id="apply-filter" class="btn-secondary">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                    <button id="clear-filter" class="btn-secondary">
+                        <i class="fas fa-times"></i> إزالة التصفية
+                    </button>
+                </div>
+                <button id="export-csv" class="btn-success">
+                    <i class="fas fa-file-csv"></i> تصدير CSV
+                </button>
+            </div>
+
+            <!-- جدول الطلبات -->
+            <div class="table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب</th>
+                            <th>العميل</th>
+                            <th>المطعم</th>
+                            <th>المنصة</th>
+                            <th>المبلغ</th>
+                            <th>السبب</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-tbody">
+                        <!-- سيتم ملء البيانات هنا ديناميًا -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- قسم إرسال الإشعارات -->
+        <section class="whatsapp-section">
+            <div class="section-header">
+                <h2><i class="fab fa-whatsapp"></i> إرسال إشعارات للمطاعم</h2>
+                <p>أرسل إشعارات واتساب للمطاعم حول الطلبات الملغاء</p>
+            </div>
+            <div class="whatsapp-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="whatsapp-restaurant">
+                            <i class="fas fa-store"></i> اختر المطعم
+                        </label>
+                        <select id="whatsapp-restaurant">
+                            <option value="">اختر المطعم</option>
+                            <!-- سيتم ملء الخيارات ديناميكيًا -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsapp-number">
+                            <i class="fas fa-phone"></i> رقم واتساب المطعم
+                        </label>
+                        <input type="tel" id="whatsapp-number" placeholder="مثال: +971501234567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp-message">
+                        <i class="fas fa-comment"></i> رسالة الإشعار
+                    </label>
+                    <textarea id="whatsapp-message" rows="4" placeholder="اكتب رسالة الإشعار هنا..."></textarea>
+                </div>
+                <button id="send-whatsapp" class="btn-success">
+                    <i class="fab fa-whatsapp"></i> إرسال الإشعار
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- نافذة منبثقة للرد على الإشعار -->
+    <div id="response-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-reply"></i> رد المطعم</h3>
+                <p>اختر سبب الرد</p>
+            </div>
+            <div class="form-group">
+                <label for="response-reason">سبب الرد</label>
+                <select id="response-reason">
+                    <option value="تم التسليم">تم التسليم للسائق</option>
+                    <option value="لم يتم التسليم">لم يتم تنفيذ الطلب</option>
+                    <option value="معلومات غير صحيحة">معلومات غير صحيحة</option>
+                    <option value="طلب إعادة">طلب إعادة الطلب</option>
+                </select>
+            </div>
+            <button id="submit-response" class="btn-primary">
+                <i class="fas fa-paper-plane"></i> إرسال الرد
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة تحميل -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>جاري تحميل البيانات...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
